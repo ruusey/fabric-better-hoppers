@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "hopr:block/hopperplus"
+    },
+    "facing=east": {
+      "model": "hopr:block/hopperplus_side",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "hopr:block/hopperplus_side"
+    },
+    "facing=south": {
+      "model": "hopr:block/hopperplus_side",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "hopr:block/hopperplus_side",
+      "y": 270
+    }
+  }
+}
