@@ -1,8 +1,9 @@
 # HopR - BetterHoppers for Minecraft
 
 ## Setup
-Becuase I write tons of java i have 100000 JDKs installed SO please change this line or remove it from `gradle.properties`
-`org.gradle.java.home=D:/Programs/java/jdk-19.0` - This was something i personally needed to add to not interfere with other development environments I have locally :)
+Becuase I write tons of java i have 100000 JDKs installed *SO PLEASE* change this line or remove it from `gradle.properties`
+`org.gradle.java.home=D:/Programs/java/jdk-19.0` 
+- This was something i personally needed to add to not interfere with other development environments I have locally :)
 
 Required fabric loader 0.14.11 And Fabric API to run on your server/Fabric Loader to run on your client.
 No theres no setup or config this item is stupid OP. `/give @p hopr:betterhopper` 
