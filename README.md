@@ -1,9 +1,12 @@
-# Fabric Example Mod
+# HopR - BetterHoppers for Minecraft
 
 ## Setup
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+Required fabric loader 0.14.11 And Fabric API to run on your server/Fabric Loader to run on your client.
+No theres no setup or config this item is stupid OP. `/give @p hopr:betterhopper` 
+and enjoy your unthrottled item transfer 
+(20/s)
 
 ## License
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+Insert something about licensing. take from this and learn my child.
