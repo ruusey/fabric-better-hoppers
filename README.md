@@ -1,5 +1,7 @@
 # HopR - BetterHoppers for Minecraft
 
+![](https://i.imgur.com/qhfoxte.gif)
+
 ## Setup
 Becuase I write tons of java i have 100000 JDKs installed *SO PLEASE* change this line or remove it from `gradle.properties`
 `org.gradle.java.home=D:/Programs/java/jdk-19.0` 
