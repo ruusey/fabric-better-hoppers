@@ -8,7 +8,7 @@ Becuase I write tons of java i have 100000 JDKs installed *SO PLEASE* change thi
 - This was something i personally needed to add to not interfere with other development environments I have locally :)
 
 Required fabric loader 0.14.11 And Fabric API to run on your server/Fabric Loader to run on your client.
-No theres no setup or config this item is stupid OP. `/give @p hopr:betterhopper` 
+No theres no setup or config this item is stupid OP. `/give @p hopr:hopperplus` 
 and enjoy your unthrottled item transfer 
 *(20/s)* assuming your server isnt garbo
 
