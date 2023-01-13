@@ -11,6 +11,8 @@ bin
 bin/*
 build
 build/*
+.gradle
+.gradle/*
 # Icon must end with two \r
 Icon
 

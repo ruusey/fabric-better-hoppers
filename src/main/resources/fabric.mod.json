@@ -25,7 +25,7 @@
    
   },
   "mixins": [
-
+	"hopr.mixins.json"
   ],
 
   "depends": {

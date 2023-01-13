@@ -19,6 +19,8 @@ public class BetterHopperInitServer implements ModInitializer {
 	static {
 		// WitherSkeletonEntity ent = Registries.ENTITY_TYPE.get(WITHER_SKELE_ID;
 		final BetterHopperBlock bhBlock = new BetterHopperBlock(BetterHopperBlock.getDefaultSettings());
+		//final EntityType<?> withereSkele = Registries.ENTITY_TYPE.get(new Identifier("minecraft:wither_skeleton"));
+
 		final BetterHopperItem bhItem = new BetterHopperItem(bhBlock, new Item.Settings());
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.REDSTONE).register(entries -> entries.add(bhItem));
 		bhItem.appendBlocks(Item.BLOCK_ITEMS, bhItem); // wat
@@ -28,6 +30,7 @@ public class BetterHopperInitServer implements ModInitializer {
 		Registry.register(Registries.BLOCK, HOPR_BLOCK_ID, bhBlock);
 		Registry.register(Registries.SCREEN_HANDLER, HOPR_SCREEN_ID,
 				new ScreenHandlerType<BetterHopperScreenHandler>(BetterHopperScreenHandler::new));
+		
 
 	}
 
