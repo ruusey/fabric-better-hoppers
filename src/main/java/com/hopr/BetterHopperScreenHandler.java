@@ -11,14 +11,12 @@ public class BetterHopperScreenHandler extends HopperScreenHandler {
 		super(syncId, playerInventory);
 	}
 
-	public BetterHopperScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory2) {
-		super(syncId, playerInventory, inventory2);
-
+	public BetterHopperScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
+		super(syncId, playerInventory, inventory);
 	}
 
 	@Override
 	public ScreenHandlerType<?> getType() {
 		return BetterHopperService.getScreenHandlerType();
 	}
-
 }

@@ -41,7 +41,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 
-@SuppressWarnings("unchecked")
 public class BetterHopperBlockEntity extends LootableContainerBlockEntity implements Hopper, NamedScreenHandlerFactory {
 	public static final int TRANSFER_COOLDOWN = -1;
 	private DefaultedList<ItemStack> inventory = DefaultedList.ofSize(5, ItemStack.EMPTY);
@@ -107,6 +106,10 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 			itemStack.setCount(getMaxCountPerStack());
 		}
 	}
+	
+	public long getLastTickTime() {
+		return this.lastTickTime;
+	}
 
 	@Override
 	protected Text getContainerName() {
@@ -131,7 +134,7 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 		}
 
 		if (!hopperBlockEntity.needsCooldown()
-				&& ((Boolean) blockState.get((Property) HopperBlock.ENABLED)).booleanValue()) {
+				&& ((Boolean) blockState.get((Property<?>) HopperBlock.ENABLED)).booleanValue()) {
 			boolean bl = false;
 
 			if (!hopperBlockEntity.isEmpty()) {
@@ -147,7 +150,6 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -157,7 +159,6 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 				return false;
 			}
 		}
-
 		return true;
 	}
 
@@ -167,7 +168,7 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 			return false;
 		}
 
-		Direction direction = ((Direction) blockState.get((Property) HopperBlock.FACING)).getOpposite();
+		Direction direction = ((Direction) blockState.get((Property<?>) HopperBlock.FACING)).getOpposite();
 		if (isInventoryFull(inventory2, direction)) {
 			return false;
 		}
@@ -304,7 +305,6 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 
 		if (canInsert(inventory2, itemStack, i, direction)) {
 			boolean bl = false;
-			boolean bl2 = inventory2.isEmpty();
 			if (itemStack2.isEmpty()) {
 				inventory2.setStack(i, itemStack);
 				itemStack = ItemStack.EMPTY;
@@ -318,20 +318,6 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 				bl = (k > 0);
 			}
 			if (bl) {
-				if (bl2 && inventory2 instanceof BetterHopperBlockEntity) {
-					BetterHopperBlockEntity hopperBlockEntity = (BetterHopperBlockEntity) inventory2;
-					if (!hopperBlockEntity.isDisabled()) {
-						int k = 0;
-						if (inventory instanceof BetterHopperBlockEntity) {
-							BetterHopperBlockEntity hopperBlockEntity2 = (BetterHopperBlockEntity) inventory;
-							if (hopperBlockEntity.lastTickTime >= hopperBlockEntity2.lastTickTime) {
-								k = 1;
-							}
-						}
-						hopperBlockEntity.setTransferCooldown(8 - k);
-					}
-				}
-
 				inventory2.markDirty();
 			}
 		}
@@ -340,7 +326,7 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 
 	@Nullable
 	private static Inventory getOutputInventory(World world, BlockPos blockPos, BlockState blockState) {
-		Direction direction = (Direction) blockState.get((Property) HopperBlock.FACING);
+		Direction direction = (Direction) blockState.get((Property<?>) HopperBlock.FACING);
 		return getInventoryAt(world, blockPos.offset(direction));
 	}
 
@@ -373,6 +359,7 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 		Block block = blockState.getBlock();
 		if (block instanceof InventoryProvider) {
 			SidedInventory sidedInventory = ((InventoryProvider) block).getInventory(blockState, world, blockPos);
+			inventory = sidedInventory;
 		} else if (blockState.hasBlockEntity()) {
 			BlockEntity blockEntity = world.getBlockEntity(blockPos);
 
@@ -434,10 +421,6 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 	}
 
 	private boolean needsCooldown() {
-		return false;
-	}
-
-	private boolean isDisabled() {
 		return false;
 	}
 

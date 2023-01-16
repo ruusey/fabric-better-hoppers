@@ -13,15 +13,10 @@ public class BetterHopperInitClient implements ClientModInitializer {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onInitializeClient() {
-
 		registerSyncPacketReceiver(RegistrySyncManager.DIRECT_PACKET_HANDLER);
 		registerSyncPacketReceiver(RegistrySyncManager.NBT_PACKET_HANDLER);
 		HandledScreens.register(BetterHopperService.getScreenHandlerType(), BetterHopperScreen::new);
 		BlockRenderLayerMap.INSTANCE.putBlock(BetterHopperService.getBlockType(), RenderLayer.getSolid());
-		//BlockRenderLayerMap.INSTANCE.putItem(BetterHopperService.getBlockItem(),
-		// RenderLayer.getEntitySolid(HOPR_ITEM_ID));
-		// RegistrySyncManager.bootstrapRegistries();
-
 	}
 
 	private static void registerSyncPacketReceiver(RegistryPacketHandler packetHandler) {

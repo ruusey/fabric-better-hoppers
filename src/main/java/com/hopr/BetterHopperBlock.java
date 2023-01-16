@@ -9,6 +9,7 @@ import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.stat.Stats;
@@ -43,6 +44,13 @@ public class BetterHopperBlock extends HopperBlock {
 		}
 
 		return ActionResult.CONSUME;
+	}
+
+	@Override
+	public void onEntityCollision(BlockState blockState, World world, BlockPos blockPos, Entity entity) {
+		BlockEntity blockEntity = world.getBlockEntity(blockPos);
+		if (blockEntity instanceof BetterHopperBlockEntity)
+			BetterHopperBlockEntity.onEntityCollided(world, blockPos, blockState, entity, (BetterHopperBlockEntity) blockEntity);
 	}
 
 	@Override
