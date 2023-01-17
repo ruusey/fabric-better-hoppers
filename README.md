@@ -7,10 +7,12 @@ Becuase I write tons of java i have 100000 JDKs installed *SO PLEASE* change thi
 `org.gradle.java.home=D:/Programs/java/jdk-19.0` 
 - This was something i personally needed to add to not interfere with other development environments I have locally :)
 
-Required fabric loader 0.14.11 And Fabric API to run on your server/Fabric Loader to run on your client.
-No theres no setup or config this item is stupid OP. `/give @p hopr:hopperplus` 
+Requireds Fabric Loader 0.14.12 (client) And Fabric API (server) to run this mod on your server. Get them [HERE](https://fabricmc.net/develop/)
+
+No theres no setup or additional configuration
+this item is stupid OP. So ```/give @p hopr:hopperplus``` 
 and enjoy your unthrottled item transfer 
-*(20/s)* assuming your server isnt garbo
+*(20/s)* assuming your server runs under 50ms per tick
 
 ## Manual Building
 
