@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "hopr",
-  "version": "1.0.2",
+  "version": "1.0.3",
 
   "name": "Better Hoppers",
   "description": "Hoppers with single game tick transfer cooldown",
