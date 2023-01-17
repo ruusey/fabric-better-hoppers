@@ -1,5 +1,7 @@
 package com.hopr;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.stream.Collectors;
@@ -7,6 +9,8 @@ import java.util.stream.IntStream;
 
 import org.jetbrains.annotations.Nullable;
 
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.MappingResolver;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
@@ -14,12 +18,14 @@ import net.minecraft.block.HopperBlock;
 import net.minecraft.block.InventoryProvider;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
+import net.minecraft.block.entity.EnderChestBlockEntity;
 import net.minecraft.block.entity.Hopper;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.EnderChestInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
@@ -193,8 +199,19 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 	private static IntStream getAvailableSlots(Inventory inventory, Direction direction) {
 		if (inventory instanceof SidedInventory) {
 			return IntStream.of(((SidedInventory) inventory).getAvailableSlots(direction));
+		}else if ( inventory instanceof EnderChestInventory) {
+			List<Integer> slots = new ArrayList<>();
+			DefaultedList<ItemStack> endStacks = ((EnderChestInventory) inventory).stacks;
+			for (int i = 0; i< endStacks.size(); i++) {
+				ItemStack stack = endStacks.get(i);
+				if(stack!=null && (stack.getCount()==0 ||  stack.getCount() < stack.getMaxCount())) {
+					slots.add(i);
+				}
+			}
+			int[] openSlots = slots.stream().mapToInt(Integer::intValue).toArray();
+			return IntStream.of(openSlots);
 		}
-
+		
 		return IntStream.range(0, inventory.size());
 	}
 
@@ -283,6 +300,9 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 	}
 
 	private static boolean canInsert(Inventory inventory, ItemStack itemStack, int i, @Nullable Direction direction) {
+		if(inventory instanceof EnderChestInventory && !((EnderChestInventory) inventory).canInsert(itemStack)) {
+			return true;
+		}
 		if (!inventory.isValid(i, itemStack)) {
 			return false;
 		}
@@ -295,6 +315,9 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 	private static boolean canExtract(Inventory inventory, ItemStack itemStack, int i, Direction direction) {
 		if (inventory instanceof SidedInventory && !((SidedInventory) inventory).canExtract(i, itemStack, direction)) {
 			return false;
+		}
+		if(inventory instanceof EnderChestInventory && !((EnderChestInventory) inventory).isEmpty()) {
+			return true;
 		}
 		return true;
 	}
@@ -368,10 +391,11 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 
 				if (inventory instanceof ChestBlockEntity && block instanceof ChestBlock) {
 					inventory = ChestBlock.getInventory((ChestBlock) block, blockState, world, blockPos, true);
-				}
-			}
+				}	
 		}
-
+	
+		}
+		
 		if (inventory == null) {
 			List<Entity> list = world.getOtherEntities((Entity) null,
 					new Box(d - 0.5D, e - 0.5D, f - 0.5D, d + 0.5D, e + 0.5D, f + 0.5D),
@@ -381,6 +405,33 @@ public class BetterHopperBlockEntity extends LootableContainerBlockEntity implem
 				inventory = (Inventory) list.get(world.random.nextInt(list.size()));
 			}
 		}
+
+		if(inventory==null) {
+			for(PlayerEntity player : world.getPlayers()) {
+				try {
+					EnderChestInventory inv = player.getEnderChestInventory();
+					if(inv!=null && inv.size()>0) {
+						MappingResolver resolver = FabricLoader.getInstance().getMappingResolver();
+						String realClass = resolver.unmapClassName("intermediary", EnderChestInventory.class.getName());
+						Class<?> cls = Class.forName(realClass);
+						//resolver
+						Field privateField = cls.getDeclaredField("field_7864");
+						privateField.setAccessible(true);
+						EnderChestBlockEntity activeChest = (EnderChestBlockEntity)privateField.get(inv); 
+						if(activeChest!=null && activeChest.getPos().equals(blockPos)) {
+							inventory = inv;
+							
+						}
+					}
+				
+				}catch(Exception e1) {
+					System.out.println("Failed to consume/insert from players Ender Inventory! "+e1.getMessage());
+					e1.printStackTrace();
+				}
+				
+			}
+		}
+		
 
 		return inventory;
 	}
